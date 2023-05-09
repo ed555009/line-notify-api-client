@@ -19,9 +19,6 @@ public static class ServicesExtensions
 		var config = GetNotifyApiConfig(configuration);
 		var refitSettings = GetRefitSettings();
 
-		if (config == null)
-			throw new ArgumentNullException(nameof(config), "NotifyApiConfig is null");
-
 		_ = services
 			.AddSingleton(config)
 			.AddRefitClient<INotifyApi>(refitSettings)
@@ -37,11 +34,11 @@ public static class ServicesExtensions
 		};
 	}
 
-	static NotifyApiConfig? GetNotifyApiConfig(IConfiguration configuration) =>
+	static NotifyApiConfig GetNotifyApiConfig(IConfiguration configuration) =>
 		configuration
 			.GetSection("Line")
 			.GetSection("Notify")
-			.Get<NotifyApiConfig>();
+			.Get<NotifyApiConfig>() ?? throw new NullReferenceException("Could not find Line Notify Api config");
 
 	static RefitSettings GetRefitSettings() =>
 		new()
