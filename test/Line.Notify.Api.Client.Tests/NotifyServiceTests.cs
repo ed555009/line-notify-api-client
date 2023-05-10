@@ -22,8 +22,10 @@ public class NotifyServiceTests : BaseServiceTests
 		_notifyService = new NotifyService(_notifyApiMock.Object, _notifyApiConfigMock.Object);
 	}
 
-	[Fact]
-	public async void NotifyAsync_ShouldSucceedAsync()
+	[Theory]
+	[InlineData(null)]
+	[InlineData("MyToken")]
+	public async void NotifyAsync_ShouldSucceedAsync(string? authToken)
 	{
 		// Given
 		_ = _notifyApiMock
@@ -31,38 +33,44 @@ public class NotifyServiceTests : BaseServiceTests
 			.Returns(CreateResponse<ResponseModel.NotifyModel>(HttpStatusCode.OK));
 
 		// When
-		var result = await _notifyService.NotifyAsync(new RequestModel.MessageModel
-		{
-			Message = "Test message"
-		});
+		var result = await _notifyService.NotifyAsync(
+			new RequestModel.MessageModel
+			{
+				Message = "Test message"
+			},
+			authToken);
 
 		// Then
 		Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 	}
 
-	[Fact]
-	public async void StatusAsync_ShouldSucceed()
+	[Theory]
+	[InlineData(null)]
+	[InlineData("MyToken")]
+	public async void StatusAsync_ShouldSucceed(string? authToken)
 	{
 		// Given
 		_ = _notifyApiMock.Setup(x => x.StatusAsync(It.IsAny<string>()))
 			.Returns(CreateResponse<ResponseModel.StatusModel>(HttpStatusCode.OK));
 
 		// When
-		var result = await _notifyService.StatusAsync();
+		var result = await _notifyService.StatusAsync(authToken);
 
 		// Then
 		Assert.Equal(HttpStatusCode.OK, result.StatusCode);
 	}
 
-	[Fact]
-	public async void RevokeAsync_ShouldSucceed()
+	[Theory]
+	[InlineData(null)]
+	[InlineData("MyToken")]
+	public async void RevokeAsync_ShouldSucceed(string? authToken)
 	{
 		// Given
 		_ = _notifyApiMock.Setup(x => x.RevokeAsync(It.IsAny<string>()))
 			.Returns(CreateResponse<ResponseModel.RevokeModel>(HttpStatusCode.OK));
 
 		// When
-		var result = await _notifyService.RevokeAsync();
+		var result = await _notifyService.RevokeAsync(authToken);
 
 		// Then
 		Assert.Equal(HttpStatusCode.OK, result.StatusCode);

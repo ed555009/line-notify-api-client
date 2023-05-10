@@ -17,12 +17,12 @@ public class NotifyService : INotifyService
 		_notifyApiConfig = notifyApiConfig;
 	}
 
-	public async Task<ApiResponse<NotifyModel>> NotifyAsync(MessageModel data) =>
-		await _notifyApi.NotifyAsync(_notifyApiConfig.AuthToken, data);
+	public async Task<ApiResponse<NotifyModel>> NotifyAsync(MessageModel data, string? authToken = null) =>
+		await _notifyApi.NotifyAsync(authToken ?? _notifyApiConfig.AuthToken, data);
 
-	public async Task<ApiResponse<RevokeModel>> RevokeAsync() =>
-		await _notifyApi.RevokeAsync(_notifyApiConfig.AuthToken);
+	public async Task<ApiResponse<RevokeModel>> RevokeAsync(string? authToken = null) =>
+		await _notifyApi.RevokeAsync(authToken ?? _notifyApiConfig.AuthToken);
 
-	public async Task<ApiResponse<StatusModel>> StatusAsync() =>
-		await _notifyApi.StatusAsync(_notifyApiConfig.AuthToken);
+	public async Task<ApiResponse<StatusModel>> StatusAsync(string? authToken = null) =>
+		await _notifyApi.StatusAsync(authToken ?? _notifyApiConfig.AuthToken);
 }

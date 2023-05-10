@@ -66,10 +66,19 @@ public class MyProcess
 
 	public async Task NotifyAsync()
 	{
+		// use the default token from appsettings.json
 		var result = await _notifyService.NotifyAsync(new MessageModel
 		{
 			Message = "Test message"
 		});
+
+		// or pass in another token so you can send notification to multiple LINE account at the same time
+		var dynamicTokenResult = await _notifyService.NotifyAsync(
+			new MessageModel
+			{
+				Message = "Test message"
+			},
+			"MyAuthToken");
 	}
 }
 ```
